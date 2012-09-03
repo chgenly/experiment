@@ -171,11 +171,9 @@ package net.osmand;
 *				
 *----------------------------------------------------------------------------*/
 
-// Import required classes and packages
-import java.text.ParseException;
+//Import required classes and packages
 import java.text.SimpleDateFormat;
-import java.text.NumberFormat;
-import java.text.DecimalFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -218,12 +216,10 @@ public class SunriseSunset
 	private	int		iDay;					// day of date of interest
 	private	int		iCount;					// a simple counter
 	private	int		iSign;					// SUNUP.BAS: S
-	private double	dfHourRise, dfHourSet;	// hour of event: SUNUP.BAS H3
-	private double	dfMinRise, dfMinSet;	// minute of event: SUNUP.BAS M3
+	private int  	dfHourRise, dfHourSet;	// hour of event: SUNUP.BAS H3
+	private int 	dfMinRise, dfMinSet;	// minute of event: SUNUP.BAS M3
 	private	double	dfSinLat, dfCosLat;		// sin and cos of latitude
 	private	double	dfZenith;				// SUNUP.BAS Z: Zenith
-//	private	SimpleDateFormat dfmtDate;		// formatting for date alone
-	private	SimpleDateFormat dfmtDateTime;	// formatting for date and time
 	private	SimpleDateFormat dfmtYear;		// formatting for year
 	private	SimpleDateFormat dfmtMonth;		// formatting for month
 	private	SimpleDateFormat dfmtDay;		// formatting for day
@@ -244,9 +240,6 @@ public class SunriseSunset
 	private	double	dfL0, dfL2;				// SUNUP.BAS L0, L2
 	private	double	dfT, dfT0, dfTT;		// SUNUP.BAS T, T0, TT
 	private	double	dfV0, dfV1, dfV2;		// SUNUP.BAS V0, V1, V2
-	
-	private TimeZone tz = TimeZone.getTimeZone( "GMT" );
-	private double origTimeZone;
 	
 	
 /******************************************************************************
@@ -273,7 +266,6 @@ public class SunriseSunset
 		dfLon 		= dfLonIn;
 		dateInput 	= dateInputIn;
 		dfTimeZone 	= dfTimeZoneIn;
-		origTimeZone= dfTimeZoneIn;
 
 		// Call the method to do the calculations.
 		doCalculations();
@@ -290,27 +282,22 @@ public class SunriseSunset
 *----------------------------------------------------------------------------*/
 	private void doCalculations()
 	{
-		try
-		{
 			// Break out day, month, and year from date provided.
-			// (This is necesary for the math algorithms.)
+			// (This is necessary for the math algorithms.)
 
 			dfmtYear  = new SimpleDateFormat( "yyyy" );
 			dfmtYear.setLenient( false );
-			dfmtYear.setTimeZone( tz );
 
 			dfmtMonth = new SimpleDateFormat( "M" );
 			dfmtMonth.setLenient( false );
-			dfmtMonth.setTimeZone( tz );
 
 			dfmtDay   = new SimpleDateFormat( "d" );
 			dfmtDay.setLenient( false );
-			dfmtDay.setTimeZone( tz );
 			
 			iYear  = Integer.parseInt(  dfmtYear.format( dateInput ) );
 			iMonth = Integer.parseInt( dfmtMonth.format( dateInput ) );
 			iDay   = Integer.parseInt(   dfmtDay.format( dateInput ) );
-					
+			
 			// Convert time zone hours to decimal days (SUNUP.BAS line 50)
 			dfTimeZone = dfTimeZone / 24.0;
 
@@ -464,10 +451,10 @@ public class SunriseSunset
 	
 			// Initialize sunrise and sunset times, and other variables
 			// hr and min are set to impossible times to make errors obvious
-			dfHourRise = 99.0;
-			dfMinRise  = 99.0;
-			dfHourSet  = 99.0;
-			dfMinSet   = 99.0;
+			dfHourRise = 99;
+			dfMinRise  = 99;
+			dfHourSet  = 99;
+			dfMinSet   = 99;
 			dfV0 = 0.0;		// initialization implied by absence in SUNUP.BAS
 			dfV2 = 0.0;		// initialization implied by absence in SUNUP.BAS
 				
@@ -571,8 +558,8 @@ public class SunriseSunset
 				// only if sunrise/set occurred this hour.
 				if ( bSunrise )
 				{
-					dfHourRise = Math.floor( dfC0 + tempE + 1.0/120.0 );
-					dfMinRise  = Math.floor( 
+					dfHourRise = (int)( dfC0 + tempE + 1.0/120.0 );
+					dfMinRise  = (int) ( 
 											 ( dfC0 + tempE + 1.0/120.0 
 											    - dfHourRise 
 											 )
@@ -582,8 +569,8 @@ public class SunriseSunset
 	
 				if ( bSunset )
 				{
-					dfHourSet  = Math.floor( dfC0 + tempE + 1.0/120.0 );
-					dfMinSet   = Math.floor( 
+					dfHourSet  = (int) ( dfC0 + tempE + 1.0/120.0 );
+					dfMinSet   = (int)( 
 											 ( dfC0 + tempE + 1.0/120.0
 											    - dfHourSet 
 											 ) 
@@ -608,48 +595,37 @@ public class SunriseSunset
 			}
 	
 			// Load dateSunrise with data
-			dfmtDateTime = new SimpleDateFormat( "d M yyyy HH:mm z" );
 
-			// Timezone signal is reversed in SunriseSunset class
-			String tz_signal = origTimeZone <= 0?"-":"+";
-			double abs_tz = Math.abs(origTimeZone);
-			NumberFormat formatter = new DecimalFormat("00");
-
-			String tz_offset_hours = formatter.format((int)abs_tz);
-			String tz_offset_minutes = formatter.format((int)(60 * (abs_tz - (int)abs_tz)));
+//			// Timezone signal is reversed in SunriseSunset class
+//			String tz_signal = origTimeZone <= 0?"-":"+";
+//			double abs_tz = Math.abs(origTimeZone);
+//			NumberFormat formatter = new DecimalFormat("00");
+//
+//			String tz_offset_hours = formatter.format((int)abs_tz);
+//			String tz_offset_minutes = formatter.format((int)(60 * (abs_tz - (int)abs_tz)));
 
 			if( bSunriseToday )
 			{
-				dateSunrise = dfmtDateTime.parse( iDay 
-										+ " " + iMonth 
-										+ " " + iYear 
-										+ " " + (int)dfHourRise
-										+ ":" + (int)dfMinRise 
-										+ " GMT"
-									    + tz_signal + tz_offset_hours
-										+":" + tz_offset_minutes );
+				Calendar c = Calendar.getInstance();
+				c.set(Calendar.YEAR, iYear);
+				c.set(Calendar.MONTH, iMonth-1);
+				c.set(Calendar.DAY_OF_MONTH, iDay);
+				c.set(Calendar.HOUR_OF_DAY, dfHourRise);
+				c.set(Calendar.MINUTE, dfMinRise);
+				dateSunrise = c.getTime();
 			}
 		
 			// Load dateSunset with data
 			if( bSunsetToday )
 			{
-				dateSunset = dfmtDateTime.parse( iDay 
-										+ " " + iMonth 
-										+ " " + iYear 
-										+ " " + (int)dfHourSet
-										+ ":" + (int)dfMinSet 
-										+ " GMT"
-									    + tz_signal + tz_offset_hours
-										+":" + tz_offset_minutes );
+				Calendar c = Calendar.getInstance();
+				c.set(Calendar.YEAR, iYear);
+				c.set(Calendar.MONTH, iMonth-1);
+				c.set(Calendar.DAY_OF_MONTH, iDay);
+				c.set(Calendar.HOUR_OF_DAY, dfHourSet);
+				c.set(Calendar.MINUTE, dfMinSet);
+				dateSunset = c.getTime();
 			}
-		} // end of try
-
-		// Catch errors
-		catch( ParseException e )
-		{
-			e.printStackTrace();
-		} // end of catch
-
 	}
 	
 	
@@ -819,9 +795,9 @@ public class SunriseSunset
 
 		return( bDaytime );
 	}
-
 } // end of class 
 
 /*-----------------------------------------------------------------------------
 *							end of class
 *----------------------------------------------------------------------------*/
+
