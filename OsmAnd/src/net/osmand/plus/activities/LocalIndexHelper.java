@@ -6,6 +6,7 @@ import java.io.RandomAccessFile;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -305,7 +306,18 @@ public class LocalIndexHelper {
 	
 	private File[] listFilesSorted(File dir){
 		File[] listFiles = dir.listFiles();
-		Arrays.sort(listFiles);
+		Arrays.sort(listFiles, new Comparator<File>() {
+			@Override
+			public int compare(File object1, File object2) {
+				if (object1.getName().compareTo(object2.getName()) > 0) {
+					return -1;
+				} else if (object1.getName().equals(object2.getName())) {
+					return 0;
+				}
+				return 1;
+			}
+
+		});
 		return listFiles;
 	}
 	
