@@ -1,0 +1,87 @@
+Turn left
+Turn sharply left.
+Turn slightly left.
+Keep left.
+
+Turn right
+Turn sharply right
+Turn slightly right
+Keep right
+
+Prepare to turn right after 2 miles
+Turn sharply left after 3 miles
+The trip is 10 miles.
+After about 4 miles turn slightly left.
+Route recalculated. Distance 5 miles.
+GPS signal lost.
+Go straight ahead.
+Prepare to make a U turn after 6 miles.
+After 7 miles make a U turn.
+When possible, please make a U turn.
+Prepare to enter a roundabout after 8 miles.
+After 9 miles enter the roundabout and take the first exit.
+Take the second exit.
+Go straight ahead.
+Follow the course of the road for 10 miles.
+... and arrive at your destination.
+You have reached your destination.
+Turn right, then left.
+
+first
+second
+third
+fourth
+fifth
+sixth
+seventh
+eighth
+ninth tenth
+eleventh
+twelfth
+thirteenth
+fourteenth
+fifteenth
+sixteenth
+seventeenth
+
+zero
+one
+two
+three
+four
+five
+six
+seven
+eight
+nine
+ten
+eleven
+twelve
+12
+14
+15
+16
+17
+18
+19
+20
+30
+40
+50
+60
+70
+80
+90
+
+five hundred
+
+six thousand
+
+A lot of miles.
+
+one meter.
+12 meters.
+
+one kilometer
+100 kilometers.
+
