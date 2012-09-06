@@ -1116,4 +1116,9 @@
 	<string name="edit_filter_create_message">Filter {0} has been created</string>
 	<string name="default_buttons_selectall">Select All</string>
 	<string name="email">email</string>
+	<string name="tracking_settings_descr">Tracking options</string>
+	<string name="tracking_settings">Tracking</string>
+	<string name="misc_settings_descr">Misc description</string>
+	<string name="misc_settings">Misc</string>
+	<string name="enable_sleep_mode">enable sleep mode</string>
 </resources>

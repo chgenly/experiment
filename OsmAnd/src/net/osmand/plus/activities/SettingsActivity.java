@@ -252,11 +252,12 @@ public class SettingsActivity extends PreferenceActivity implements OnPreference
 
 	@Override
     public void onCreate(Bundle savedInstanceState) {
-    	CustomTitleBar titleBar = new CustomTitleBar(this, R.string.settings_activity, R.drawable.tab_settings_screen_icon);
-    	setTheme(R.style.CustomTitleTheme_Preference);
 		super.onCreate(savedInstanceState);
+//    	CustomTitleBar titleBar = new CustomTitleBar(this, R.string.settings_activity, R.drawable.tab_settings_screen_icon);
+    	setTheme(R.style.CustomTitleTheme_Preference);
 		addPreferencesFromResource(R.xml.settings_pref);
-		titleBar.afterSetContentView();
+//		titleBar.afterSetContentView();
+		if (true) return;
 		
 		
 		
@@ -417,7 +418,7 @@ public class SettingsActivity extends PreferenceActivity implements OnPreference
 	@Override
 	protected void onResume() {
 		super.onResume();
-		updateAllSettings();
+//		updateAllSettings();
 	}
 
 	@Override
@@ -472,7 +473,7 @@ public class SettingsActivity extends PreferenceActivity implements OnPreference
 	@SuppressWarnings("unchecked")
 	@Override
 	public boolean onPreferenceChange(Preference preference, Object newValue) {
-		// handle boolean prefences
+		// handle boolean preferences
 		OsmandPreference<Boolean> boolPref = booleanPreferences.get(preference.getKey());
 		OsmandPreference<Integer> seekPref = seekBarPreferences.get(preference.getKey());
 		OsmandPreference<Object> listPref = (OsmandPreference<Object>) listPreferences.get(preference.getKey());
@@ -636,6 +637,7 @@ public class SettingsActivity extends PreferenceActivity implements OnPreference
 
 	@Override
 	public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
+		if (true)return false;
 		// customize the sub-preference title according the selected profile
 		String title = "";
 		if (preference.getKey() != null && preference instanceof PreferenceScreen
