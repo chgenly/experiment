@@ -1121,4 +1121,6 @@
 	<string name="misc_settings_descr">Misc description</string>
 	<string name="misc_settings">Misc</string>
 	<string name="enable_sleep_mode">enable sleep mode</string>
+	<string name="Common">Common</string>
+	<string name="enable">enable</string>
 </resources>
