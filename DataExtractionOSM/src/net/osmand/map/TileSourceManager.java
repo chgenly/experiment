@@ -2,6 +2,7 @@ package net.osmand.map;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -322,9 +323,9 @@ public class TileSourceManager {
 	public static List<TileSourceTemplate> downloadTileSourceTemplates(String versionAsUrl) {
 		final List<TileSourceTemplate> templates = new ArrayList<TileSourceTemplate>();
 		try {
-			URLConnection connection = new URL("http://download.osmand.net//tile_sources.php?" + versionAsUrl).openConnection();
+
 			final SAXParser saxParser = SAXParserFactory.newInstance().newSAXParser();
-			saxParser.parse(connection.getInputStream(), new DefaultHandler(){
+			DefaultHandler dh = new DefaultHandler(){
 				@Override
 				public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
 					String name = saxParser.isNamespaceAware() ? localName : qName;
@@ -347,7 +348,10 @@ public class TileSourceManager {
 						}
 					}
 				}
-			});
+			};
+			loadGoogleSatellite(dh); 
+			URLConnection connection = new URL("http://download.osmand.net//tile_sources.php?" + versionAsUrl).openConnection();
+			saxParser.parse(connection.getInputStream(), dh);
 		} catch (IOException e) {
 			log.error("Exception while downloading tile sources", e);
 			return null;
@@ -359,6 +363,15 @@ public class TileSourceManager {
 			return null;
 		}
 		return templates;
+	}
+	
+	public static void loadGoogleSatellite(DefaultHandler dh) throws ParserConfigurationException, SAXException, IOException {
+		final SAXParser saxParser2 = SAXParserFactory.newInstance().newSAXParser();
+		double r1 = Math.random();
+		double r2 = Math.random();
+		String s = "<tile_source rule=\"beanshell\" name=\"GoogleMaps Satellite\" ext=\".jpg\" min_zoom=\"7\" max_zoom=\"20\" tile_size=\"256\" img_density=\"32\" avg_img_size=\"18000\" url_template='"+
+		"String getTileUrl(int z, int x, int y) { return \"http://khm\"+((int)("+r1+"*3.999))+\".google.com/kh/v=108&amp;src=app&amp;x=\"+x+\"&amp;y=\"+y+\"&amp;z=\"+z+\"&amp;s=\"+\"Galileo\".substring(0,1+(int)("+r2+"*6.999));}'/>";
+		saxParser2.parse(new ByteArrayInputStream(s.getBytes()), dh);
 	}
 	
 	private static TileSourceTemplate createTileSourceTemplate(Map<String, String> attrs) {
