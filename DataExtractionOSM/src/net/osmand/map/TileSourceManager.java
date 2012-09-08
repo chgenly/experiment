@@ -365,14 +365,13 @@ public class TileSourceManager {
 		return templates;
 	}
 	
-	public static double loadGoogleSatellite(DefaultHandler dh) throws ParserConfigurationException, SAXException, IOException {
+	public static void loadGoogleSatellite(DefaultHandler dh) throws ParserConfigurationException, SAXException, IOException {
 		final SAXParser saxParser2 = SAXParserFactory.newInstance().newSAXParser();
-		String s = "<tile_source rule=\"beanshell\" name=\"GoogleMaps Satellite\" ext=\".jpg\" min_zoom=\"7\" max_zoom=\"20\" tile_size=\"256\" img_density=\"32\" avg_img_size=\"18000\" url_template='import java.lang.Math; String getTileUrl(int z, int x, int y) { return \"http://khm\"+((int)(java.lang.Math.random()*3.999))+\".google.com/kh/v=108&amp;src=app&amp;x=\"+x+\"&amp;y=\"+y+\"&amp;z=\"+z+\"&amp;s=\"+\"Galileo\".substring(0,1+(int)(java.lang.Math.random()*6.999));}'/>";
+		double r1 = Math.random();
+		double r2 = Math.random();
+		String s = "<tile_source rule=\"beanshell\" name=\"GoogleMaps Satellite\" ext=\".jpg\" min_zoom=\"7\" max_zoom=\"20\" tile_size=\"256\" img_density=\"32\" avg_img_size=\"18000\" url_template='"+
+		"String getTileUrl(int z, int x, int y) { return \"http://khm\"+((int)("+r1+"*3.999))+\".google.com/kh/v=108&amp;src=app&amp;x=\"+x+\"&amp;y=\"+y+\"&amp;z=\"+z+\"&amp;s=\"+\"Galileo\".substring(0,1+(int)("+r2+"*6.999));}'/>";
 		saxParser2.parse(new ByteArrayInputStream(s.getBytes()), dh);
-
-		// Just so beanshell can find random.
-		return Math.random();
-	
 	}
 	
 	private static TileSourceTemplate createTileSourceTemplate(Map<String, String> attrs) {
